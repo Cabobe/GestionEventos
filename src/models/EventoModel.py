@@ -11,7 +11,7 @@ class EventoModel():
             eventos=[]
 
             with connection.cursor() as cursor:
-                cursor.execute("""SELECT id_evento, nombre_evento, descripcion, fecha, hora, latitud, longitud FROM "GestionEventos"."Eventos";""")
+                cursor.execute("""SELECT id_evento, nombre_evento, descripcion, fecha, hora, latitud, longitud FROM "GestionEventos"."Eventos" ORDER BY 1""")
                 resultset=cursor.fetchall()
 
             for row in resultset:
@@ -33,7 +33,7 @@ class EventoModel():
             with connection.cursor() as cursor:
                 cursor.execute("""SELECT id_evento, nombre_evento, descripcion, fecha, hora, latitud, longitud 
                                   FROM "GestionEventos"."Eventos" 
-                                  WHERE id_evento = %s""",(id_evento))
+                                  WHERE id_evento = %s""",(id_evento,))
                 row=cursor.fetchone()
 
                 evento = None
@@ -72,6 +72,43 @@ class EventoModel():
             raise Exception(ex) 
         
     #Actualizar un evento
-        
+    @classmethod
+    def update_evento(self,evento):
+        try:
+            connection = get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("""UPDATE "GestionEventos"."Eventos"
+                                    SET 
+                                    nombre_evento=%s, 
+                                    descripcion=%s, 
+                                    fecha=%s,
+                                    hora=%s, 
+                                    latitud=%s, 
+                                    longitud=%s
+                                    WHERE id_evento=%s""", 
+                                  (evento.nombre_evento, evento.descripcion, evento.fecha, evento.hora, evento.latitud, evento.longitud, evento.id_evento))
+                rowaffected = cursor.rowcount
+                connection.commit()
+                connection.close()
+                return str(rowaffected)
+
+        except Exception as ex:
+            raise Exception(ex)    
     
     #Borrar un evento
+    @classmethod
+    def delete_evento(self,id_evento):
+        try:
+            connection=get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("""DELETE FROM "GestionEventos"."Eventos" 
+                                  WHERE id_evento = %s""",(id_evento,))
+                rowaffected = cursor.rowcount
+                connection.commit()
+                connection.close()
+                return str(rowaffected)
+
+        except Exception as ex:
+            raise Exception(ex) 
