@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from entities.Evento import Evento 
 from models.EventoModel import EventoModel 
+from utils.GeoReferenciacion import GeoReferenciacion
 
 main = Blueprint('gestioneventos_blueprint',__name__)
 
@@ -81,5 +82,26 @@ def delete_evento():
             return jsonify({'message':"Evento actualizado."})
         else:
             return jsonify({'message':"Error en el delete"}) , 500
+    except Exception as ex:
+        return jsonify({'mensaje': str(ex)}), 500
+    
+#Georeferenciacion inversa
+@main.route('/GeoRefInv', methods=['POST'])
+def GeoRefInversa():
+    try:
+        street = None
+        latitud = request.json['latitud']
+        longitud = request.json['longitud']
+        data = GeoReferenciacion.GeoRefInversa(latitud,longitud)          
+        street = data["address"]["road"]+" "+data["address"]["house_number"]
+    
+        nearby =[]
+        nearby.append("Direccion: " + street)
+        nearby.append("Sitios Cercanos: ")
+        data = GeoReferenciacion.GeoRefNearby(latitud,longitud)             
+        for site in data:
+         nearby.append(site["display_name"]+", ")
+
+        return nearby
     except Exception as ex:
         return jsonify({'mensaje': str(ex)}), 500
