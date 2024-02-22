@@ -1,0 +1,13 @@
+-- Role: usr_gestion
+-- DROP ROLE IF EXISTS usr_gestion;
+
+CREATE ROLE usr_gestion WITH
+  LOGIN
+  NOSUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION
+  ENCRYPTED PASSWORD 'SCRAM-SHA-256$4096:tDGlaftMjO4ryidDerPIRg==$k+B2uqCGbqjNVj3nERuJtSdUOCo+5lf7Y7k5ELZVop0=:TM0kwXvhopon1EFsXmfNWBJ+7RDc2o9USQnO/5pvyUk=';
+
+GRANT pg_write_all_data TO usr_gestion;
