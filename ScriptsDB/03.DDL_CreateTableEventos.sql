@@ -7,12 +7,10 @@ CREATE TABLE IF NOT EXISTS "GestionEventos"."Eventos"
     id_evento serial NOT NULL,
     nombre_evento character varying(30) COLLATE pg_catalog."default" NOT NULL,
     descripcion character varying(150) COLLATE pg_catalog."default",
-    fecha_inicio date NOT NULL,
-    hora_inicio time without time zone NOT NULL,
-    fecha_fin date NOT NULL,
-    hora_fin time without time zone NOT NULL,
-    latitud character varying(12) COLLATE pg_catalog."default" NOT NULL,
-    longitud character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    fecha character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    hora character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    latitud numeric NOT NULL,
+    longitud numeric NOT NULL,
     CONSTRAINT "Eventos_pkey" PRIMARY KEY (id_evento)
 )
 
